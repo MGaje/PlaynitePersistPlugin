@@ -1,0 +1,5 @@
+Name: Playnite Persist
+Author: Michael J. Gajewski
+version: 1.0
+Module: PlaynitePersistPlugin.dll
+Type: GenericLibrary
