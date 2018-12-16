@@ -12,10 +12,24 @@ namespace PlaynitePersistPlugin.Archives
     {
         public static string CreateGamesArchive()
         {
-            string zipFilename = Path.Combine("Archives", "games.zip");
-            ZipFile.CreateFromDirectory(Path.Combine("library", "games"), zipFilename);
+            if (!Directory.Exists("Archives"))
+            {
+                Directory.CreateDirectory("Archives");
+            }
 
-            return zipFilename;
+            string gamesArchive = Path.Combine("Archives", "playnite-games-data.zip");
+            ZipFile.CreateFromDirectory(Path.Combine("library", "games"), gamesArchive);
+
+            return gamesArchive;
+        }
+
+        public static void DeleteGamesArchive()
+        {
+            string gamesArchive = Path.Combine("Archives", "playnite-games-data.zip");
+            if (File.Exists(gamesArchive))
+            {
+                File.Delete(gamesArchive);
+            }
         }
     }
 }

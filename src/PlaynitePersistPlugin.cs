@@ -68,12 +68,17 @@ namespace PlaynitePersistPlugin
 
         public void OnGameStopped(Game game, long elapsedSeconds)
         {
-            this.logger.Debug($"[FROM PLAYNITEPERSISTPLUGIN] - {game.Name} has stopped!");
             this.logger.Debug($"Creating games archive to persist...");
             Archive.CreateGamesArchive();
             this.logger.Debug($"Done creating games archive!");
 
-            //this.testDriver.Load();
+            this.logger.Debug($"Attempting to upload the games archive...");
+            this.testDriver.UploadGamesArchive();
+            this.logger.Debug($"Finished uploading games archive");
+
+            this.logger.Debug($"Attempting to delete games archive");
+            Archive.DeleteGamesArchive();
+            this.logger.Debug($"Games archive deleted");
         }
 
         public void OnGameUninstalled(Game game)
