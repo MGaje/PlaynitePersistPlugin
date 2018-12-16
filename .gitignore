@@ -342,4 +342,7 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
+# Google Api Credentials
+credentials.json
+
 # End of https://www.gitignore.io/api/visualstudio

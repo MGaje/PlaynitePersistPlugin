@@ -1,6 +1,7 @@
 ﻿using Playnite.SDK;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
+using PlaynitePersistPlugin.Drivers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace PlaynitePersistPlugin
     {
         private ILogger logger = LogManager.GetLogger();
         private IPlayniteAPI api;
+        private GoogleDriveDriver testDriver;
 
         public Guid Id { get; } = Guid.Parse("BE1C544D-8958-4448-B197-12F3393E0728");
 
@@ -66,6 +68,8 @@ namespace PlaynitePersistPlugin
         public void OnGameStopped(Game game, long elapsedSeconds)
         {
             this.logger.Debug($"[FROM PLAYNITEPERSISTPLUGIN] - {game.Name} has stopped!");
+            this.logger.Debug($"Attempting to persist");
+            this.testDriver.Load();
         }
 
         public void OnGameUninstalled(Game game)
@@ -76,6 +80,7 @@ namespace PlaynitePersistPlugin
         public void OnApplicationStarted()
         {
             this.logger.Debug("PlaynitePersistPlugin initialization!");
+            this.testDriver = new GoogleDriveDriver(this.logger);
         }
     }
 }
