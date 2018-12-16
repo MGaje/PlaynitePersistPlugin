@@ -2,6 +2,7 @@
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using PlaynitePersistPlugin.Drivers;
+using PlaynitePersistPlugin.Archives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,8 +69,11 @@ namespace PlaynitePersistPlugin
         public void OnGameStopped(Game game, long elapsedSeconds)
         {
             this.logger.Debug($"[FROM PLAYNITEPERSISTPLUGIN] - {game.Name} has stopped!");
-            this.logger.Debug($"Attempting to persist");
-            this.testDriver.Load();
+            this.logger.Debug($"Creating games archive to persist...");
+            Archive.CreateGamesArchive();
+            this.logger.Debug($"Done creating games archive!");
+
+            //this.testDriver.Load();
         }
 
         public void OnGameUninstalled(Game game)

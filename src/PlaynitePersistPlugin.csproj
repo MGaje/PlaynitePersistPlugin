@@ -62,6 +62,8 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Archives\Archive.cs" />
     <Compile Include="Drivers\GoogleDriveDriver.cs" />
     <Compile Include="PlaynitePersistPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
