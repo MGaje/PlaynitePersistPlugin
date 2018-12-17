@@ -79,6 +79,8 @@ namespace PlaynitePersistPlugin
             this.logger.Debug($"Attempting to delete games archive");
             Archive.DeleteGamesArchive();
             this.logger.Debug($"Games archive deleted");
+
+            this.api.Dialogs.ShowMessage("Games data synced to Google Drive", "Success", System.Windows.MessageBoxButton.OK);
         }
 
         public void OnGameUninstalled(Game game)
