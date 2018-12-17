@@ -68,19 +68,27 @@ namespace PlaynitePersistPlugin
 
         public void OnGameStopped(Game game, long elapsedSeconds)
         {
-            this.logger.Debug($"Creating games archive to persist...");
-            Archive.CreateGamesArchive();
-            this.logger.Debug($"Done creating games archive!");
+            try
+            {
+                this.logger.Debug($"Creating games archive to persist...");
+                Archive.CreateGamesArchive();
+                this.logger.Debug($"Done creating games archive!");
 
-            this.logger.Debug($"Attempting to upload the games archive...");
-            this.testDriver.UploadGamesArchive();
-            this.logger.Debug($"Finished uploading games archive");
+                this.logger.Debug($"Attempting to upload the games archive...");
+                this.testDriver.UploadGamesArchive();
+                this.logger.Debug($"Finished uploading games archive");
 
-            this.logger.Debug($"Attempting to delete games archive");
-            Archive.DeleteGamesArchive();
-            this.logger.Debug($"Games archive deleted");
+                this.logger.Debug($"Attempting to delete games archive");
+                Archive.DeleteGamesArchive();
+                this.logger.Debug($"Games archive deleted");
 
-            this.api.Dialogs.ShowMessage("Games data synced to Google Drive", "Success", System.Windows.MessageBoxButton.OK);
+                this.api.Dialogs.ShowMessage("Games data synced to Google Drive", "Success", System.Windows.MessageBoxButton.OK);
+            }
+            catch (Exception e)
+            {
+                this.logger.Error($"An error occurred persisting data to Google Drive: {e.Message}");
+                this.api.Dialogs.ShowErrorMessage($"Games data was not persisted to Google Drive. An error occurred. See log.", "Error");
+            }
         }
 
         public void OnGameUninstalled(Game game)
