@@ -1,7 +1,7 @@
 ﻿using Playnite.SDK;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
-using PlaynitePersistPlugin.Drivers;
+using PlaynitePersistPlugin.Providers;
 using PlaynitePersistPlugin.Archives;
 using System;
 using System.Collections.Generic;
@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.IO;
 
 namespace PlaynitePersistPlugin
 {
@@ -16,9 +17,10 @@ namespace PlaynitePersistPlugin
     {
         private ILogger logger = LogManager.GetLogger();
         private IPlayniteAPI api;
-        private GoogleDriveDriver testDriver;
+        private ICloudProvider testProvider;
         private const string persistPluginNotificationId = "persistSuccess";
         private const string persistPluginErrorNotificationId = "persistError";
+        private const string archiveFile = "playnite-games-data.zip";
 
         public Guid Id { get; } = Guid.Parse("BE1C544D-8958-4448-B197-12F3393E0728");
 
@@ -72,16 +74,19 @@ namespace PlaynitePersistPlugin
         {
             try
             {
+                string path = "Archives";
+                string archiveFileAndPath = Path.Combine(path, archiveFile);
+
                 this.logger.Debug($"Creating games archive to persist...");
-                Archive.CreateGamesArchive();
+                Archive.CreateGamesArchive(path, archiveFile);
                 this.logger.Debug($"Done creating games archive!");
 
                 this.logger.Debug($"Attempting to upload the games archive...");
-                this.testDriver.UploadGamesArchive();
+                this.testProvider.SyncTo(path, archiveFile);
                 this.logger.Debug($"Finished uploading games archive");
 
                 this.logger.Debug($"Attempting to delete games archive");
-                Archive.DeleteGamesArchive();
+                Archive.DeleteGamesArchive(archiveFileAndPath);
                 this.logger.Debug($"Games archive deleted");
 
                 this.api.Notifications.Add(persistPluginNotificationId, "Games data synced to Google Drive", NotificationType.Info);
@@ -101,7 +106,11 @@ namespace PlaynitePersistPlugin
         public void OnApplicationStarted()
         {
             this.logger.Debug("PlaynitePersistPlugin initialization!");
-            this.testDriver = new GoogleDriveDriver(this.logger);
+            this.testProvider = new GoogleDriveDriver(this.logger);
+            this.testProvider.Connect();
+
+            //this.logger.Debug("Attempting to download archive.");
+            //this.testProvider.SyncFrom(archiveFile, Path.Combine("Archives", archiveFile));
         }
     }
 }
