@@ -17,6 +17,8 @@ namespace PlaynitePersistPlugin
         private ILogger logger = LogManager.GetLogger();
         private IPlayniteAPI api;
         private GoogleDriveDriver testDriver;
+        private const string persistPluginNotificationId = "persistSuccess";
+        private const string persistPluginErrorNotificationId = "persistError";
 
         public Guid Id { get; } = Guid.Parse("BE1C544D-8958-4448-B197-12F3393E0728");
 
@@ -82,12 +84,12 @@ namespace PlaynitePersistPlugin
                 Archive.DeleteGamesArchive();
                 this.logger.Debug($"Games archive deleted");
 
-                this.api.Dialogs.ShowMessage("Games data synced to Google Drive", "Success", System.Windows.MessageBoxButton.OK);
+                this.api.Notifications.Add(persistPluginNotificationId, "Games data synced to Google Drive", NotificationType.Info);
             }
             catch (Exception e)
             {
                 this.logger.Error($"An error occurred persisting data to Google Drive: {e.Message}");
-                this.api.Dialogs.ShowErrorMessage($"Games data was not persisted to Google Drive. An error occurred. See log.", "Error");
+                this.api.Notifications.Add(persistPluginErrorNotificationId, "An error occurred persisting games data to Google Drive", NotificationType.Error);
             }
         }
 
