@@ -18,7 +18,7 @@ namespace PlaynitePersistPlugin.Providers
     /// <summary>
     /// Cloud provider for Google Drive.
     /// </summary>
-    public class GoogleDriveDriver : ICloudProvider
+    public class GoogleDriveProvider : ICloudProvider
     {
         static string[] Scopes = { DriveService.Scope.Drive };
         static string ApplicationName = "PlaynitePersistPlugin";
@@ -30,7 +30,7 @@ namespace PlaynitePersistPlugin.Providers
         /// Constructor.
         /// </summary>
         /// <param name="logger">Injected logger.</param>
-        public GoogleDriveDriver(ILogger logger)
+        public GoogleDriveProvider(ILogger logger)
         {
             this.logger = logger;
         }
@@ -116,15 +116,14 @@ namespace PlaynitePersistPlugin.Providers
             if (files != null && files.Count > 0)
             {
                 var playniteGamesArchive = files.FirstOrDefault(x => String.Equals(x.Name, archiveFile, StringComparison.OrdinalIgnoreCase));
-                if (playniteGamesArchive != null)
-                {
-                    this.logger.Debug($"Playnite Games Archive found. Downloading to sync.");
-                    this.DownloadFile(this.driveService.Files.Get(playniteGamesArchive.Id), downloadPath);
-                }
-                else
+                if (playniteGamesArchive == null)
                 {
                     this.logger.Debug("No Playnite Games Archive found on Google Drive.");
+                    return;
                 }
+
+                this.logger.Debug($"Playnite Games Archive found. Downloading to sync.");
+                this.DownloadFile(this.driveService.Files.Get(playniteGamesArchive.Id), downloadPath);
             }
         }
 

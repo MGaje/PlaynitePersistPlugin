@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Archives\Archive.cs" />
-    <Compile Include="Providers\GoogleDriveDriver.cs" />
+    <Compile Include="Providers\GoogleDriveProvider.cs" />
     <Compile Include="PlaynitePersistPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ICloudProvider.cs" />

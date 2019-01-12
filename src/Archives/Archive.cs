@@ -10,6 +10,12 @@ namespace PlaynitePersistPlugin.Archives
 {
     public static class Archive
     {
+        /// <summary>
+        /// Create games data archive.
+        /// </summary>
+        /// <param name="path">The parent path.</param>
+        /// <param name="archiveFile">The games data archive.</param>
+        /// <returns></returns>
         public static string CreateGamesArchive(string path, string archiveFile)
         {
             if (!Directory.Exists(path))
@@ -23,6 +29,10 @@ namespace PlaynitePersistPlugin.Archives
             return gamesArchive;
         }
 
+        /// <summary>
+        /// Delete the games data archive.
+        /// </summary>
+        /// <param name="archiveFile">The games data archive.</param>
         public static void DeleteGamesArchive(string archiveFile)
         {
             if (File.Exists(archiveFile))
@@ -31,9 +41,27 @@ namespace PlaynitePersistPlugin.Archives
             }
         }
 
+        /// <summary>
+        /// Extract games data from archive.
+        /// </summary>
+        /// <param name="archiveFile">The games data archive.</param>
+        /// <param name="extractPath">The path to extract the archive to.</param>
         public static void ExtractGamesArchive(string archiveFile)
         {
+            if (!File.Exists(archiveFile))
+            {
+                throw new FileNotFoundException($"{archiveFile} not found!");
+            }
 
+            string extractPath = Path.Combine("library", "games");
+
+            using (var archive = ZipFile.OpenRead(archiveFile))
+            {
+                foreach (var entry in archive.Entries)
+                {
+                    entry.ExtractToFile(Path.Combine(extractPath, entry.FullName), true);
+                }
+            }
         }
     }
 }
